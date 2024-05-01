@@ -1,5 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData
+from sqlalchemy_serializer import SerializerMixin
 
 metadata = MetaData(naming_convention={
     "ix": "ix_%(column_0_label)s",
@@ -14,3 +15,5 @@ db = SQLAlchemy(metadata=metadata)
 class Model(db.Model):
     __tablename__ = 'test'
     id = db.Column(db.Integer, primary_key=True)
+
+
