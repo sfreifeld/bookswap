@@ -1,5 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData
+from sqlalchemy_serializer import SerializerMixin
 
 metadata = MetaData(naming_convention={
     "ix": "ix_%(column_0_label)s",
@@ -11,6 +12,9 @@ metadata = MetaData(naming_convention={
 
 db = SQLAlchemy(metadata=metadata)
 
-class Model(db.Model):
-    __tablename__ = 'test'
+class User(db.Model, SerializerMixin):
+    __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.Text)
+    username = db.Column(db.Text)
+    password = db.Column(db.Text)
