@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 
 function Home() {
+    // Fetch all ongoing events
     const [events, setEvents] = useState([]);
-
     useEffect(() => {
         fetch("/api/events") 
             .then(response => {
@@ -12,7 +12,6 @@ function Home() {
                 return response.json();
             })
             .then(data => {
-                console.log("Received events:", data);
                 setEvents(data);
             })
             .catch(error => {
@@ -22,11 +21,14 @@ function Home() {
 
     return (
         <>
-            <section id="hero">
-                Welcome to Book Swap
+            <section id="hero" className="h-screen mx-10">
+                <h1 className="text-8xl font-bold pt-60">Welcome to Book Swap</h1>
+                <p className="text-2xl mt-8">Discover your new favorite read & connect with fellow book worms!</p>
             </section>
-            <section id="event_list">
-                <h2>Event List:</h2>
+
+
+            <section>
+                <h2 className="text-lg font-semibold">Upcoming Book Swap Events:</h2>
                 <ul>
                     {events.map(event => (
                         <li key={event.id}>
@@ -38,9 +40,10 @@ function Home() {
                     ))}
                 </ul>
             </section>
+
+            <button>Create New Event</button>
         </>
     );
 }
 
 export default Home;
-
