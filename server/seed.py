@@ -10,8 +10,8 @@ def add_fake_users(num_users=10):
     for _ in range(num_users):
         email = fake.email()
         username = fake.user_name()
-        password = fake.password()
-        new_user = User(email=email, username=username, password=password)
+        password_hash = fake.password()
+        new_user = User(email=email, username=username, password_hash=password_hash)
         db.session.add(new_user)
     db.session.commit()
 
