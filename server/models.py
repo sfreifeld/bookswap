@@ -1,6 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData
 from sqlalchemy_serializer import SerializerMixin
+from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
@@ -23,6 +24,29 @@ class User(db.Model, SerializerMixin):
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
+
+
+class Moderator(db.Model, SerializerMixin):
+
+    __tablename__ = "moderators"
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    event_id = db.Column(db.Integer, db.ForeignKey('events.id'))
+
+
+class Event(db.Model, SerializerMixin):
+
+    __tablename__ = 'events'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    date = db.Column(db.DateTime, default=datetime.utcnow)
+    address = db.Column(db.String(100), nullable=False)
+    details = db.Column(db.Text)
+    attendees = db.Column(db.Integer, nullable=False)
+
+    
 
     def check_password(self, typed_password):
         return check_password_hash(self.password_hash, typed_password)

@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify, current_app
 app = Flask(__name__)
 from flask_migrate import Migrate
-from models import db, User
+from models import db, User, Event
 from faker import Faker
 from flask_cors import CORS
 
@@ -17,8 +17,6 @@ app.json.compact = False
 migrate = Migrate(app, db)
 db.init_app(app)
 CORS(app)
-
-
 
 
 @app.route('/signup', methods=['GET','POST'])
@@ -62,6 +60,11 @@ def signin():
 
 
 
+@app.route('/events', methods=['GET'])
+def get_all_events():
+    events = Event.query.all()
+    event_list = [{'id': event.id, 'name': event.name, 'date': event.date.strftime('%Y-%m-%d'), 'address': event.address, 'attendees': event.attendees, 'details': event.details} for event in events]
+    return jsonify(event_list), 200
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)

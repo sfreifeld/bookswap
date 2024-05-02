@@ -10,10 +10,13 @@ import Signin from "./components/Signin"
 import Signup from "./components/Signup"
 import Home from "./components/Home"
 
+
 import './App.css'
+import './tailwind.css'
 
 
 function App() {
+
   return (
     <Router>
       <div>
