@@ -26,19 +26,20 @@ function Home() {
                 <p className="text-2xl mt-8">Discover your new favorite read & connect with fellow book worms!</p>
             </section>
 
-
-            <section>
-                <h2>Upcoming Book Swap Events:</h2>
-                <ul>
-                    {events.map(event => (
-                        <li key={event.id}>
-                            <h3>{event.name}</h3>
+            <section className="container space-y-10 p-20">
+            <h2 className="text-4xl text-center font-bold">Upcoming Book Swap Events</h2>
+            
+                {events.map(event => (
+                    <div key={event.id} className="bg-white rounded-lg shadow-md overflow-hidden">
+                        <div className="p-4">
+                            <h3 className="text-xl font-semibold mb-2">{event.name}</h3>
                             <p>Date: {event.date}</p>
                             <p>Address: {event.address}</p>
-                            <p>Details: {event.details}</p>
-                        </li>
-                    ))}
-                </ul>
+                            <p>Attendees: {event.attendees}</p>
+                            <button>Click to view details</button>
+                        </div>
+                    </div>
+                ))}
             </section>
 
             <button>Create New Event</button>
