@@ -1,6 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData
 from sqlalchemy_serializer import SerializerMixin
+from datetime import datetime
 
 metadata = MetaData(naming_convention={
     "ix": "ix_%(column_0_label)s",
@@ -18,3 +19,26 @@ class User(db.Model, SerializerMixin):
     email = db.Column(db.Text)
     username = db.Column(db.Text)
     password = db.Column(db.Text)
+
+
+class Moderator(db.Model, SerializerMixin):
+
+    __tablename__ = "moderators"
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    event_id = db.Column(db.Integer, db.ForeignKey('events.id'))
+
+
+class Event(db.Model, SerializerMixin):
+
+    __tablename__ = 'events'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    date = db.Column(db.DateTime, default=datetime.utcnow)
+    address = db.Column(db.String(100), nullable=False)
+    details = db.Column(db.Text)
+    attendees = db.Column(db.Integer, default=2)
+
+    

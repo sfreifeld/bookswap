@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 app = Flask(__name__)
 from flask_migrate import Migrate
-from models import db, User
+from models import db, User, Event
 from faker import Faker
 fake = Faker()
 
@@ -12,8 +12,6 @@ app.json.compact = False
 
 migrate = Migrate(app, db)
 db.init_app(app)
-
-
 
 
 @app.route('/signup', methods=['POST'])
@@ -36,15 +34,17 @@ def get_signups():
 '''
 
 
-
-
-
 def get_usernames():
     users = User.query.all()
     usernames = [user.username for user in users]
     return jsonify(usernames), 200
 
 
+@app.route('/events', methods=['GET'])
+def get_all_events():
+    events = Event.query.all()
+    event_list = [{'id': event.id, 'name': event.name, 'date': event.date.strftime('%Y-%m-%d'), 'address': event.address, 'details': event.details} for event in events]
+    return jsonify(event_list), 200
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)

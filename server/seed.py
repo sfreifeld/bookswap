@@ -1,10 +1,14 @@
-
 from faker import Faker
-
 from app import app
-from models import db, User
+from models import db, User, Event
 
 fake = Faker()
+
+def drop_tables():
+    db.drop_all()
+
+def create_tables():
+    db.create_all()
 
 def add_fake_users(num_users=10):
     for _ in range(num_users):
@@ -16,30 +20,26 @@ def add_fake_users(num_users=10):
     db.session.commit()
 
 
-if __name__ == '__main__':
-    with app.app_context():
-        add_fake_users()
-from app import app
-from models import db, Event
-
-with app.app_context():
-
-    def drop_tables():
-        db.drop_all()
-
-    def create_tables():
-        db.create_all()
-    
-def insert_events():
-    
-    event1 = Event(name="Denver Public Library", address="10 W 14th Ave, Denver, CO 80204", description="Book swap event at Denver Public Library")
-    event2 = Event(name="The Shop at MATTER", address="2114 Market St, Denver, CO 80205", description="Book swap event at The Shop at MATTER")
-    event3 = Event(name="Tattered Book Cover", address="1701 Wynkoop St, Denver, CO 80202", description="Book swap event at Tattered Book Cover")
-    
-    db.session.add_all([event1, event2, event3])
+def add_fake_events(num_events=5):
+    for _ in range(num_events):
+        name = fake.company()
+        date = fake.date_object()
+        address = fake.address()
+        details = fake.text()
+        attendees = fake.random_int(min=1, max=10)
+        new_event = Event(name=name, date=date, address=address, details=details, attendees=attendees)
+        db.session.add(new_event)
     db.session.commit()
 
-if __name__ == "__main__":
+if __name__ == '__main__':
+    with app.app_context():
         drop_tables()
         create_tables()
-        insert_events()
+        add_fake_users()
+        add_fake_events()
+
+
+
+    
+
+
