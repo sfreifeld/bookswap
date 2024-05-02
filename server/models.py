@@ -39,6 +39,6 @@ class Event(db.Model, SerializerMixin):
     date = db.Column(db.DateTime, default=datetime.utcnow)
     address = db.Column(db.String(100), nullable=False)
     details = db.Column(db.Text)
-    attendees = db.Column(db.Integer, default=2)
+    attendees = db.Column(db.Integer, nullable=False)
 
     

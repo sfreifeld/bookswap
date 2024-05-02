@@ -43,7 +43,7 @@ def get_usernames():
 @app.route('/events', methods=['GET'])
 def get_all_events():
     events = Event.query.all()
-    event_list = [{'id': event.id, 'name': event.name, 'date': event.date.strftime('%Y-%m-%d'), 'address': event.address, 'details': event.details} for event in events]
+    event_list = [{'id': event.id, 'name': event.name, 'date': event.date.strftime('%Y-%m-%d'), 'address': event.address, 'attendees': event.attendees, 'details': event.details} for event in events]
     return jsonify(event_list), 200
 
 if __name__ == '__main__':
