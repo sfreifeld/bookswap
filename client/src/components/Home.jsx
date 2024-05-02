@@ -28,7 +28,7 @@ function Home() {
 
 
             <section>
-                <h2 className="text-lg font-semibold">Upcoming Book Swap Events:</h2>
+                <h2>Upcoming Book Swap Events:</h2>
                 <ul>
                     {events.map(event => (
                         <li key={event.id}>
