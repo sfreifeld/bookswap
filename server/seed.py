@@ -1,5 +1,4 @@
 from faker import Faker
-from datetime import datetime, timedelta
 from app import app
 from models import *
 from services import *
@@ -24,17 +23,15 @@ def add_fake_users(num_users=10):
 
 def add_fake_events(num_events=5):
 
-    current_date = datetime.now()
-
     for _ in range(num_events):
 
         name = fake.company()
-        date = fake.date_object()
-        # future_date = fake.date_time_between_dates(datetime_start=current_date + timedelta(days=1), datetime_end=current_date + timedelta(days=365))
+        date = fake.date()
+        time = fake.time()
         address = fake.address()
         details = fake.text()
         attendees = fake.random_int(min=1, max=10)
-        new_event = Event(name=name, date=date, address=address, details=details, attendees=attendees)
+        new_event = Event(name=name, date=date, time=time, address=address, details=details, attendees=attendees)
         db.session.add(new_event)
     db.session.commit()
 

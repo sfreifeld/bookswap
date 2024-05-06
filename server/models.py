@@ -1,8 +1,11 @@
 from sqlalchemy_serializer import SerializerMixin
+<<<<<<< HEAD
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.ext.hybrid import hybrid_property
 from services import *
+=======
+>>>>>>> sam
 
 
 
@@ -22,7 +25,8 @@ class Moderator(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     event_id = db.Column(db.Integer, db.ForeignKey('events.id'))
-
+    user = db.relationship('User', backref=db.backref('moderator', lazy=True))
+    event = db.relationship('Event', backref=db.backref('moderator', lazy=True))
 
 class Event(db.Model, SerializerMixin):
 
@@ -30,11 +34,15 @@ class Event(db.Model, SerializerMixin):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
-    date = db.Column(db.DateTime, default=datetime.utcnow)
+    date = db.Column(db.String(10)) 
+    time = db.Column(db.String(5)) 
     address = db.Column(db.String(100), nullable=False)
     details = db.Column(db.Text)
     attendees = db.Column(db.Integer, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id')) 
+    user = db.relationship('User', backref=db.backref('events', lazy=True))
 
+<<<<<<< HEAD
     
 
     @hybrid_property
@@ -82,3 +90,5 @@ class Event(db.Model, SerializerMixin):
         return bcrypt.check_password_hash(self._password_hash, password.encode('utf-8'))
     '''
 
+=======
+>>>>>>> sam
