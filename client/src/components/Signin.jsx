@@ -11,6 +11,16 @@ function Signin( {setUser } ) {
     const navigate = useNavigate();
 
 
+  useEffect(() => {
+    // auto-login
+    fetch("/api/checksession").then((r) => {
+      if (r.ok) {
+        r.json().then((user) => setUser(user));
+      }
+    });
+  }, []); 
+
+
     const handleSignUpClick = () => {
         navigate('/createaccount')
     }

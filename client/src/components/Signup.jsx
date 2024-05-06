@@ -6,7 +6,7 @@ function Signup( {setUser}) {
     const navigate = useNavigate()
 
     const handleSignInClick = () => {
-        navigate('/signin')
+        navigate('/')
     }
 
 

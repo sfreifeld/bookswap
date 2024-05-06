@@ -1,5 +1,4 @@
-
-from flask import Flask, request, jsonify, current_app, session
+from flask import Flask, request, jsonify, current_app, session, make_response
 app = Flask(__name__)
 from flask_migrate import Migrate
 from models import db, User, Event
@@ -71,5 +70,30 @@ def get_all_events():
     event_list = [{'id': event.id, 'name': event.name, 'date': event.date.strftime('%Y-%m-%d'), 'address': event.address, 'attendees': event.attendees, 'details': event.details} for event in events]
     return jsonify(event_list), 200
 
+
+
+@app.route('/profile/<int:id>', methods=['GET', 'POST'])
+def one_profile_route(id):
+    profile = User.query.filter(User.id == id).first()
+    if not profile:
+        return make_response({"error": "Profile not found"}, 404)
+
+    if request.method == "GET":
+        return make_response(profile.to_dict(), 200)
+    elif request.method == "POST":
+        data = request.get_json()
+        description = data.get('description')
+        if description is not None:
+            profile.description = description
+            db.session.commit()
+            return make_response(profile.to_dict(), 200)
+        else:
+            return make_response({"error": "No description provided"}, 400)
+
+
+
+
+
 if __name__ == '__main__':
+    app.run(port=5555, debug=True)
     app.run(port=5555, debug=True)

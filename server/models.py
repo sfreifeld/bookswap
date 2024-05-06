@@ -6,12 +6,6 @@ from services import *
 
 
 
-class User(db.Model, SerializerMixin):
-    __tablename__ = 'users'
-    id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String, unique = True)
-    username = db.Column(db.String, unique = True, nullable = False)
-    _password_hash = db.Column(db.String)
 
 
 
@@ -36,7 +30,15 @@ class Event(db.Model, SerializerMixin):
     attendees = db.Column(db.Integer, nullable=False)
 
     
+class User(db.Model, SerializerMixin):
+    __tablename__ = 'users'
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String, unique = True)
+    username = db.Column(db.String, unique = True, nullable = False)
+    description = db.Column(db.String, default="")
+    _password_hash = db.Column(db.String)
 
+    
     @hybrid_property
     def password_hash(self):
         return self._password_hash

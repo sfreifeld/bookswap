@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import NavBar from  "./NavBar"
 
 function Home({user, setUser}) {
     // Fetch all ongoing events
@@ -21,8 +22,9 @@ function Home({user, setUser}) {
 
     return (
         <>
+            <NavBar user={user} setUser={setUser} />
             <section id="hero" className="h-screen mx-10">
-                <h1 className="text-8xl font-bold pt-60">Welcome to Book Swap, ${user.username}!</h1>
+                <h1 className="text-8xl font-bold pt-60">Welcome to Book Swap, {user.username}!</h1>
                 <p className="text-2xl mt-8">Discover your new favorite read & connect with fellow book worms!</p>
             </section>
 
