@@ -1,7 +1,7 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, Response
 app = Flask(__name__)
 from flask_migrate import Migrate
-from models import db, User, Event
+from models import db, User, Event, Moderator
 from faker import Faker
 fake = Faker()
 
@@ -43,8 +43,26 @@ def get_usernames():
 @app.route('/events', methods=['GET'])
 def get_all_events():
     events = Event.query.all()
-    event_list = [{'id': event.id, 'name': event.name, 'date': event.date.strftime('%Y-%m-%d'), 'address': event.address, 'attendees': event.attendees, 'details': event.details} for event in events]
+    event_list = [{'id': event.id, 'name': event.name, 'date': event.date, 'time': event.time, 'address': event.address, 'attendees': event.attendees, 'details': event.details} for event in events]
     return jsonify(event_list), 200
+
+@app.route('/api/create', methods=['POST'])
+def create_event():
+
+    data = request.get_json()
+    # Extract event data from request
+    name = data.get('name')
+    date = data.get('date')
+    time = data.get('time')
+    address = data.get('address')
+    details = data.get('details')
+    # Create the event in the database
+    new_event = Event(name=name, date=date, time=time, address=address, details=details)
+
+    db.session.add(new_event)
+    db.session.commit()
+    return jsonify({"message": "Event created successfully"}), 201
+
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
