@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-function Home() {
+function Home({user, setUser}) {
     // Fetch all ongoing events
     const [events, setEvents] = useState([]);
     useEffect(() => {
@@ -22,7 +22,7 @@ function Home() {
     return (
         <>
             <section id="hero" className="h-screen mx-10">
-                <h1 className="text-8xl font-bold pt-60">Welcome to Book Swap</h1>
+                <h1 className="text-8xl font-bold pt-60">Welcome to Book Swap, ${user.username}!</h1>
                 <p className="text-2xl mt-8">Discover your new favorite read & connect with fellow book worms!</p>
             </section>
 
@@ -45,6 +45,7 @@ function Home() {
             <button>Create New Event</button>
         </>
     );
+
 }
 
 export default Home;

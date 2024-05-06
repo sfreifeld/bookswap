@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom"
 import { useState } from "react"
 
-function Signup() {
+function Signup( {setUser}) {
     const navigate = useNavigate()
 
     const handleSignInClick = () => {
@@ -56,15 +56,15 @@ function Signup() {
             alert('Validation failed');
             return;
         }
-        fetch('http://localhost:5555/signup', {
+        fetch('/api/signup', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
+                email,
                 username,
-                password,
-                email
+                password
             })
         })
         .then(r => {
@@ -75,7 +75,8 @@ function Signup() {
         })
         .then(data => {
             alert(data.message)
-            navigate('/')
+            setUser(data.user)
+            navigate('/home')
         })
         .catch(error => {
             console.error('Signup error:', error)
@@ -87,19 +88,47 @@ function Signup() {
     
     return (
         <>
-            <p> Welcome to BookSwap!</p>
-            <form onSubmit={(e)=>handleSignUp(e)}>
-                <input placeholder="Email Address" value={email} onChange={e => setEmail(e.target.value)} onBlur={handleEmailError}></input>
-                {emailError && <div style={{ color: 'red' }}>{emailError}</div>}
-                <input placeholder="Username" value={username} onChange={e => setUsername(e.target.value)} onBlur={handleUsernameError}></input>
-                {usernameError && <div style={{ color: 'red' }}>{usernameError}</div>}
-                <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)}></input>
-                <input type="password" placeholder="Confirm password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} onBlur={handleConfirmPasswordErrror}></input>
-                {confirmPasswordError && <div style={{ color: 'red' }}>{confirmPasswordError}</div>}
-                <button type="submit" disabled={!validateInputs()}>Create Account</button>
-            </form>
-            <p>Already have an account? Click here to sign in</p>
-            <button onClick={handleSignInClick}>Sign In</button>
+    
+                <div className="w-full max-w-xs">
+                <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" onSubmit={(e)=>handleSignUp(e)}>
+                  <div className="mb-4">
+                    <label className="block text-gray-700 text-sm font-bold mb-2">
+                      Email
+                    </label>
+                    <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="email" type="text" placeholder="Email Address" value={email} onChange={e => setEmail(e.target.value)} onBlur={handleEmailError}/>
+                    {emailError && <div style={{ color: 'red' }}>{emailError}</div>}
+                  </div>
+                  <div className="mb-4">
+                    <label className="block text-gray-700 text-sm font-bold mb-2">
+                      Username
+                    </label>
+                    <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="text" placeholder="Username" value={username} onChange={e => setUsername(e.target.value)} onBlur={handleUsernameError}/>
+                    {usernameError && <div style={{ color: 'red' }}>{usernameError}</div>} 
+                  </div>
+                  <div className="mb-4">
+                    <label className="block text-gray-700 text-sm font-bold mb-2">
+                      Password
+                    </label>
+                    <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="password" type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)}/>
+                  </div>
+                  <div className="mb-6">
+                    <label className="block text-gray-700 text-sm font-bold mb-2">
+                      Confirm Password
+                    </label>
+                    <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="password-confirmation" type="password" placeholder="Confirm Password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} onBlur={handleConfirmPasswordErrror}/>
+                    {confirmPasswordError && <div style={{ color: 'red' }}>{confirmPasswordError}</div>}
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                      Create Account
+                    </button>
+                  </div>
+                </form>
+                <p> Already have an account?  Click here to sign in!</p>
+              <button onClick={handleSignInClick} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                      Sign In
+                    </button>
+              </div>
         </>
     )
 }

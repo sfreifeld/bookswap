@@ -1,7 +1,8 @@
 from faker import Faker
 from datetime import datetime, timedelta
 from app import app
-from models import db, User, Event
+from models import *
+from services import *
 
 fake = Faker()
 
