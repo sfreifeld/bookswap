@@ -1,10 +1,27 @@
 import React from "react";
+import NavBar from "./NavBar";
+import { useNavigate } from "react-router-dom"
 
-function Home() {
+function Home( {user, setUser}) {
+
+    const navigate = useNavigate()
+
+    function goProfile(e) {
+        navigate("/profile")
+    }
+
+
+
     return (
-        <div>
-            Hello World!
-        </div>
+        <>
+            
+            < NavBar setUser ={setUser} user={user} />
+            <div>
+                {user ? `Hello ${user.username}` : "Hello World!"}
+            </div>
+            <button onClick={goProfile}>asdfghjmk</button>
+            
+        </>
     )
 }
 
