@@ -4,11 +4,13 @@ import { useNavigate } from "react-router-dom";
 
 
 
-function Signin( {setUser } ) {
+function Signin( { setUser } ) {
 
     const [loginUser, setLoginUser] = useState("")
     const [loginPassword, setLoginPassword] = useState("")
     const navigate = useNavigate();
+
+
 
 
     const handleSignUpClick = () => {
@@ -37,6 +39,8 @@ function Signin( {setUser } ) {
             }
             else {
                 alert("Not valid login credentials")
+                setLoginUser('')
+                setLoginPassword('')
                 return undefined
             }
         })
@@ -51,8 +55,8 @@ function Signin( {setUser } ) {
 
 
     return (
-        <>
-                <div className="w-full max-w-xs">
+                <div className="h-screen flex items-center justify-center flex-col translate-x-2/3">
+                <div className="w-full max-w-xs ">
                 <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" onSubmit={(e) =>login(e)}>
                   <div className="mb-4">
                     <label className="block text-gray-700 text-sm font-bold mb-2">
@@ -73,11 +77,11 @@ function Signin( {setUser } ) {
                   </div>
                 </form>
               </div>
-              <p> Don't have an account yet?  Click here to sign up!</p>
-              <button onClick={handleSignUpClick} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+              <p className="text-sm italic"> Don't have an account yet?  Click here to sign up!</p>
+              <button onClick={handleSignUpClick} className="m-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                       Sign Up
-                    </button>
-        </>
+            </button>
+            </div>
     )
 }
 

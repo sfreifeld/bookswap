@@ -9,7 +9,10 @@ class User(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String, unique = True)
     username = db.Column(db.String, unique = True, nullable = False)
+    description = db.Column(db.String, default="")
     _password_hash = db.Column(db.String)
+    avatar_id = db.Column(db.Integer)
+
 
 
     @hybrid_property
@@ -53,24 +56,4 @@ class Event(db.Model, SerializerMixin):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id')) 
     user = db.relationship('User', backref=db.backref('events', lazy=True))
 
-    '''
-    serialize_rules = ('-_password_hash',)
-
-    
-    
-    
-    
-    @hybrid_property
-    def password_hash(self):
-        return self._password_hash
-    
-
-    @password_hash.setter
-    def password_hash(self, password):
-        password_hash = bcrypt.generate_password_hash(password.encode('utf-8'))
-        self._password_hash = password_hash.decode('utf-8')
-
-    def check_password(self,password):
-        return bcrypt.check_password_hash(self._password_hash, password.encode('utf-8'))
-    '''
 

@@ -6,7 +6,7 @@ function Signup( {setUser}) {
     const navigate = useNavigate()
 
     const handleSignInClick = () => {
-        navigate('/signin')
+        navigate('/')
     }
 
 
@@ -89,21 +89,21 @@ function Signup( {setUser}) {
     return (
         <>
     
-                <div className="w-full max-w-xs">
+                <div className="w-full max-w-xs translate-x-2/3 flex flex-col">
                 <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" onSubmit={(e)=>handleSignUp(e)}>
                   <div className="mb-4">
                     <label className="block text-gray-700 text-sm font-bold mb-2">
                       Email
                     </label>
                     <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="email" type="text" placeholder="Email Address" value={email} onChange={e => setEmail(e.target.value)} onBlur={handleEmailError}/>
-                    {emailError && <div style={{ color: 'red' }}>{emailError}</div>}
+                    {emailError && <div className ='text-red-600 text-sm italic m-1'>{emailError}</div>}
                   </div>
                   <div className="mb-4">
                     <label className="block text-gray-700 text-sm font-bold mb-2">
                       Username
                     </label>
                     <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="text" placeholder="Username" value={username} onChange={e => setUsername(e.target.value)} onBlur={handleUsernameError}/>
-                    {usernameError && <div style={{ color: 'red' }}>{usernameError}</div>} 
+                    {usernameError && <div className ='text-red-600 text-sm italic m-1'>{usernameError}</div>} 
                   </div>
                   <div className="mb-4">
                     <label className="block text-gray-700 text-sm font-bold mb-2">
@@ -116,7 +116,7 @@ function Signup( {setUser}) {
                       Confirm Password
                     </label>
                     <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="password-confirmation" type="password" placeholder="Confirm Password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} onBlur={handleConfirmPasswordErrror}/>
-                    {confirmPasswordError && <div style={{ color: 'red' }}>{confirmPasswordError}</div>}
+                    {confirmPasswordError && <div className ='text-red-600 text-sm italic m-1'>{confirmPasswordError}</div>}
                   </div>
                   <div className="flex items-center justify-between">
                     <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
@@ -124,10 +124,10 @@ function Signup( {setUser}) {
                     </button>
                   </div>
                 </form>
-                <p> Already have an account?  Click here to sign in!</p>
-              <button onClick={handleSignInClick} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                <p className = "text-sm italic"> Already have an account?  Click here to sign in!</p>
+              <button onClick={handleSignInClick} className="w-24 m-3 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                       Sign In
-                    </button>
+              </button>
               </div>
         </>
     )
