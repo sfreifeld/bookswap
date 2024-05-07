@@ -8,6 +8,8 @@ from flask_cors import CORS
 from services import *
 
 
+
+
 @app.before_request
 def route_filter():
     bypass_routes = ["signup","login"]

@@ -1,13 +1,8 @@
 from sqlalchemy_serializer import SerializerMixin
-<<<<<<< HEAD
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.ext.hybrid import hybrid_property
 from services import *
-=======
->>>>>>> sam
-
-
 
 class User(db.Model, SerializerMixin):
     __tablename__ = 'users'
@@ -15,6 +10,22 @@ class User(db.Model, SerializerMixin):
     email = db.Column(db.String, unique = True)
     username = db.Column(db.String, unique = True, nullable = False)
     _password_hash = db.Column(db.String)
+
+
+    @hybrid_property
+    def password_hash(self):
+        return self._password_hash
+    
+
+    @password_hash.setter
+    def password_hash(self, password):
+        password_hash = bcrypt.generate_password_hash(password.encode('utf-8'))
+        self._password_hash = password_hash.decode('utf-8')
+        return
+    
+    def check_password(self, password):
+        return bcrypt.check_password_hash(self._password_hash, password.encode('utf-8'))
+
 
 
 
@@ -42,33 +53,6 @@ class Event(db.Model, SerializerMixin):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id')) 
     user = db.relationship('User', backref=db.backref('events', lazy=True))
 
-<<<<<<< HEAD
-    
-
-    @hybrid_property
-    def password_hash(self):
-        return self._password_hash
-    
-
-    @password_hash.setter
-    def password_hash(self, password):
-        password_hash = bcrypt.generate_password_hash(password.encode('utf-8'))
-        self._password_hash = password_hash.decode('utf-8')
-        return
-    
-    def check_password(self, password):
-        return bcrypt.check_password_hash(self._password_hash, password.encode('utf-8'))
-
-
-
-
-
-
-
-
-
-
-
     '''
     serialize_rules = ('-_password_hash',)
 
@@ -90,5 +74,3 @@ class Event(db.Model, SerializerMixin):
         return bcrypt.check_password_hash(self._password_hash, password.encode('utf-8'))
     '''
 
-=======
->>>>>>> sam
