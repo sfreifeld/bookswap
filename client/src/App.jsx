@@ -23,7 +23,6 @@ function App() {
 
 
   return (
-<<<<<<< HEAD
     <Router>
         <Routes>
           <Route path="/signin" element={<Signin setUser={setUser}/>} />
@@ -34,12 +33,6 @@ function App() {
         </Routes>
     </Router>
   );
-=======
-    <>
-      <Home />
-    </>
-  )
->>>>>>> sam
 }
 
 export default App;
