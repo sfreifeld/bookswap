@@ -5,6 +5,7 @@ from models import db, User, Event
 from faker import Faker
 from flask_cors import CORS
 from services import *
+from random import randint
 
 
 
@@ -12,9 +13,21 @@ from services import *
 
 @app.before_request
 def route_filter():
-    bypass_routes = ["signup","login"]
+    print("Endpoint:", request.endpoint)
+    bypass_routes = ["signup", "login", "check_session"]  # Replace "root_endpoint_name" with the actual endpoint name
     if request.endpoint not in bypass_routes and not session.get("user_id"):
         return {"Error": "Unauthorized"},401
+    
+
+@app.route('/checksession',methods=['GET'])
+def check_session():
+    print(session['user_id'])
+    user = User.query.filter(User.id == session["user_id"]).first()
+    if user:
+        return user.to_dict()
+    return {'message':'Not Authorized'}, 401
+
+
 
 @app.route('/login', methods = ["POST"])
 def login():
@@ -34,12 +47,12 @@ def signup():
     if request.method == 'POST':
         try:
             data = request.get_json()
-            new_user = User(email=data['email'], username=data['username'], password_hash=data['password'])
+            new_user = User(email=data['email'], username=data['username'], password_hash=data['password'], avatar_id=randint(1,10))
             db.session.add(new_user)
             db.session.commit()
             created_user = User.query.filter(User.username == data["username"]).first()
             session["user_id"] = created_user.id
-            return jsonify({"message": "User created successfully", "user": created_user.to_dict()}), 201
+            return jsonify({"message": "User created successfully!", "user": created_user.to_dict()}), 201
         except Exception as e:
             print(e)
             return {"Error": "Could not make aa user"},422
@@ -50,18 +63,12 @@ def signup():
             r_l.append(user.to_dict())
         return r_l
     
-@app.route('/checksession',methods=['GET'])
-def check_session():
-    if request.method == 'GET':
-        print(session)
-        user = User.query.filter(User.id == session["user_id"]).first()
-        return user.to_dict(),200
     
     
 @app.route('/logout', methods=["DELETE"])
 def logout():
-    session.pop('user_id')
-    return {}, 204
+    session['user_id'] = None
+    return {'message':'204: No content'}, 204
     
 
 @app.route('/events', methods=['GET'])
@@ -72,7 +79,7 @@ def get_all_events():
 
 
 
-@app.route('/profile/<int:id>', methods=['GET', 'POST'])
+@app.route('/profile/<int:id>', methods=['GET', 'POST', 'DELETE'])
 def one_profile_route(id):
     profile = User.query.filter(User.id == id).first()
     if not profile:
@@ -83,17 +90,37 @@ def one_profile_route(id):
     elif request.method == "POST":
         data = request.get_json()
         description = data.get('description')
+        avatar_id = data.get('avatar_id')
+
         if description is not None:
             profile.description = description
-            db.session.commit()
-            return make_response(profile.to_dict(), 200)
-        else:
-            return make_response({"error": "No description provided"}, 400)
+        if avatar_id is not None:
+            profile.avatar_id = avatar_id
+
+        db.session.commit()
+        return make_response(profile.to_dict(), 200)
+    
+    elif request.method == "DELETE":
+        session['user_id'] = None
+        print(session)
+        db.session.delete(profile)
+        db.session.commit()
+
+        response_body = {
+            "delete_successful": True,
+            "message": "User deleted."
+        }
+
+        response = make_response(
+            response_body,
+            200
+        )
+
+        return response
 
 
 
 
 
 if __name__ == '__main__':
-    app.run(port=5555, debug=True)
     app.run(port=5555, debug=True)

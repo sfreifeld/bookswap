@@ -9,6 +9,7 @@ from services import *
 
 
 
+
 class Moderator(db.Model, SerializerMixin):
 
     __tablename__ = "moderators"
@@ -37,6 +38,7 @@ class User(db.Model, SerializerMixin):
     username = db.Column(db.String, unique = True, nullable = False)
     description = db.Column(db.String, default="")
     _password_hash = db.Column(db.String)
+    avatar_id = db.Column(db.Integer)
 
     
     @hybrid_property

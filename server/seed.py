@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 from app import app
 from models import *
 from services import *
+from random import randint
 
 fake = Faker()
 
@@ -17,7 +18,9 @@ def add_fake_users(num_users=10):
         email = fake.email()
         username = fake.user_name()
         password_hash = fake.password()
-        new_user = User(email=email, username=username, password_hash=password_hash)
+        avatar_id = randint(1,10)
+        print(f"Generated avatar_id: {avatar_id}") 
+        new_user = User(email=email, username=username, password_hash=password_hash, avatar_id=avatar_id)
         db.session.add(new_user)
     db.session.commit()
 
