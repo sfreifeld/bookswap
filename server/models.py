@@ -3,6 +3,7 @@ from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.ext.hybrid import hybrid_property
 from services import *
+from flask import jsonify
 
 class User(db.Model, SerializerMixin):
     __tablename__ = 'users'
@@ -31,17 +32,26 @@ class User(db.Model, SerializerMixin):
 
 
 
+class Attendee(db.Model, SerializerMixin):
 
-class Moderator(db.Model, SerializerMixin):
-
-    __tablename__ = "moderators"
+    __tablename__ = "Attendees"
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     event_id = db.Column(db.Integer, db.ForeignKey('events.id'))
-    user = db.relationship('User', backref=db.backref('moderator', lazy=True))
-    event = db.relationship('Event', backref=db.backref('moderator', lazy=True))
+    user = db.relationship('User', backref=db.backref('attendee', lazy=True))
+    event = db.relationship('Event', backref=db.backref('attendee', lazy=True))
 
+    @classmethod
+    def find_by_user_id(cls, user_id):
+        return cls.query.filter_by(user_id=user_id).all()
+
+
+
+
+
+
+## Add creator to this table
 class Event(db.Model, SerializerMixin):
 
     __tablename__ = 'events'
@@ -53,7 +63,6 @@ class Event(db.Model, SerializerMixin):
     address = db.Column(db.String(100), nullable=False)
     details = db.Column(db.Text)
     attendees = db.Column(db.Integer, nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id')) 
-    user = db.relationship('User', backref=db.backref('events', lazy=True))
+    moderator_id = db.Column(db.Integer, db.ForeignKey('users.id')) 
 
 

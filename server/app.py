@@ -3,7 +3,7 @@ from flask import Flask, request, jsonify, Response, current_app, session, make_
 
 app = Flask(__name__)
 from flask_migrate import Migrate
-from models import db, User, Event, Moderator
+from models import db, User, Event, Attendee
 from faker import Faker
 from flask_cors import CORS
 from services import *
@@ -139,7 +139,11 @@ def one_profile_route(id):
         return response
 
 
-
+@app.route('/attendees/<int:user_id>', methods=['GET'])
+def get_attendees_by_user(user_id):
+    attendees = Attendee.find_by_user_id(user_id)
+    attendee_list = [attendee.to_dict() for attendee in attendees]
+    return jsonify(attendee_list), 200
 
 
 if __name__ == '__main__':
