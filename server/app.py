@@ -96,6 +96,9 @@ def create_event():
     return jsonify({"message": "Event created successfully"}), 201
 
 
+
+
+
 @app.route('/profile/<int:id>', methods=['GET', 'POST', 'DELETE'])
 def one_profile_route(id):
     profile = User.query.filter(User.id == id).first()
