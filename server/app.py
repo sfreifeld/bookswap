@@ -174,5 +174,12 @@ def get_attendees_by_user(user_id):
     return jsonify(attendee_list), 200
 
 
+@app.route('/events/<int:user_id>', methods=['GET'])
+def get_events_by_user(user_id):
+    events_created = Event.find_by_user_id(user_id)
+    events_created_list = [event.to_dict() for event in events_created]
+    return jsonify(events_created_list), 200
+
+
 if __name__ == '__main__':
     app.run(port=5555, debug=True)

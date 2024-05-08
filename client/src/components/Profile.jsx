@@ -26,6 +26,8 @@ function Profile( { user, setUser }) {
     const [editMode, setEditMode] = useState(false);
     const [description, setDescription] = useState(user ? user.description : '');
     const [selectedAvatarId, setSelectedAvatarId] = useState(user ? user.avatar_id : 5);
+    const [eventsAttended, setEventsAttended] = useState(0)
+    const [eventsCreated, setEventsCreated] = useState(0)
 
     const navigate = useNavigate();
 
@@ -46,6 +48,33 @@ function Profile( { user, setUser }) {
                 console.error('Error fetching user details:', error);
             });
     }, [userId ])
+
+    useEffect(() => {
+        fetch(`/api/attendees/${userId}`)
+            .then((r) => r.json())
+            .then((userData) => {
+                setEventsAttended((userData.length));
+
+            })
+            .catch((error) => {
+                console.error('Error fetching user metrics:', error);
+            });
+    }, [userId ])
+
+    useEffect(() => {
+        fetch(`/api/events/${userId}`)
+            .then((r) => r.json())
+            .then((userData) => {
+                setEventsCreated((userData.length));
+
+            })
+            .catch((error) => {
+                console.error('Error fetching user metrics:', error);
+            });
+    }, [userId ])
+
+
+
 
 
     const handleDescriptionChange = (event) => {
@@ -123,21 +152,15 @@ function Profile( { user, setUser }) {
                 <div className="flex justify-center py-4 lg:pt-4 pt-8">
                     <div className="mr-4 p-3 text-center">
                     <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-600">
-                        22
+                    { eventsAttended }
                     </span>
                     <span className="text-sm text-blueGray-400">Events Attended</span>
                     </div>
-                    <div className="mr-4 p-3 text-center">
-                    <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-600">
-                        10
-                    </span>
-                    <span className="text-sm text-blueGray-400">Events Created</span>
-                    </div>
                     <div className="lg:mr-4 p-3 text-center">
                     <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-600">
-                        89
+                    { eventsCreated }
                     </span>
-                    <span className="text-sm text-blueGray-400">Other Things</span>
+                    <span className="text-sm text-blueGray-400">Events Created</span>
                     </div>
                 </div>
                 </div>

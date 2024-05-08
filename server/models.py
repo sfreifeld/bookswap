@@ -66,3 +66,8 @@ class Event(db.Model, SerializerMixin):
     attendees = db.Column(db.Integer, nullable=False)
     moderator_id = db.Column(db.Integer, db.ForeignKey('users.id')) 
 
+
+    @classmethod
+    def find_by_user_id(cls, user_id):
+        return cls.query.filter_by(moderator_id=user_id).all()
+
