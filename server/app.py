@@ -8,7 +8,6 @@ from services import *
 from random import randint
 
 
-app = Flask(__name__)
 
 
 @app.before_request
