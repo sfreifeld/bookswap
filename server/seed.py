@@ -18,7 +18,6 @@ def add_fake_users(num_users=10):
         username = fake.user_name()
         password_hash = fake.password()
         avatar_id = randint(1,10)
-        print(f"Generated avatar_id: {avatar_id}") 
         new_user = User(email=email, username=username, password_hash=password_hash, avatar_id=avatar_id)
         db.session.add(new_user)
     db.session.commit()

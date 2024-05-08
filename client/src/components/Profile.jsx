@@ -22,11 +22,13 @@ import avatar10 from "../assets/10.png"
 function Profile( { user, setUser }) {
 
     const { userId } = useParams();
+    const [profileUser, setProfileUser] = useState(undefined)
     const [editMode, setEditMode] = useState(false);
-    const [description, setDescription] = useState(user.description || '');
-    const [selectedAvatarId, setSelectedAvatarId] = useState(user.avatar_id);
+    const [description, setDescription] = useState(user ? user.description : '');
+    const [selectedAvatarId, setSelectedAvatarId] = useState(user ? user.avatar_id : 5);
 
     const navigate = useNavigate();
+
     
 
 
@@ -37,13 +39,13 @@ function Profile( { user, setUser }) {
         fetch(`/api/profile/${userId}`)
             .then((r) => r.json())
             .then((userData) => {
-                setUser(userData);
+                setProfileUser(userData);
 
             })
             .catch((error) => {
                 console.error('Error fetching user details:', error);
             });
-    }, [userId])
+    }, [userId ])
 
 
     const handleDescriptionChange = (event) => {
@@ -97,7 +99,7 @@ function Profile( { user, setUser }) {
 
     return (
 
-    <>
+        <>
         <NavBar user={user} setUser={setUser} />
         <section className="w-full  bg-blueGray-50">
         <div className="w-full px-4 mx-auto">
@@ -106,9 +108,10 @@ function Profile( { user, setUser }) {
             <div className="flex flex-wrap justify-center">
                 <div className="w-full px-4 flex justify-center">
                 <div className="relative">
-                    <img alt="avatar" src={avatars[selectedAvatarId - 1]} className="shadow-xl rounded-full w-32"/>
+                    <img alt="avatar" src={profileUser && profileUser.id != user.id ? avatars[profileUser.avatar_id - 1] : avatars[selectedAvatarId - 1]} className="shadow-xl rounded-full w-32"/>
                 </div>
                 </div>
+                
                 {editMode && (
                                     <div className="w-full px-4 flex justify-center flex-wrap">
                                         {avatars.map((avatar, index) => (
@@ -141,46 +144,57 @@ function Profile( { user, setUser }) {
             </div>
             <div className="text-center mt-12">
                 <h3 className="text-xl font-semibold leading-normal mb-2 text-blueGray-700 mb-2">
-                { user.username }
+                { profileUser ? profileUser.username : "" }
                 </h3>
             </div>
             <div className="mt-10 py-10 border-t border-blueGray-200 text-center">
                 <div className="flex flex-wrap justify-center ">
-                <div className="w-full lg:w-9/12 px-4 ">
-                {editMode ? (
+            
+               <div className="w-full lg:w-9/12 px-4 ">
+                
+                {profileUser && (
+                    profileUser.id === user.id ? (
                         <>
-                            <textarea
-                                className="mb-4 text-xs leading-relaxed text-blueGray-700 w-full h-48 border border-gray-200 p-2"
-                                value={description}
-                                placeholder="Tell us about yourself! Share your favorite genres, authors, or books. You can also mention what you're currently reading or what's on your wishlist. Feel free to add any other interests that might help others connect with you. Happy swapping!"
-                                onChange={handleDescriptionChange}
-                            />
-                            <button className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow" onClick={saveProfile}>Save</button>
+                            {editMode ? (
+                                <>
+                                    <textarea
+                                        className="mb-4 text-xs leading-relaxed text-blueGray-700 w-full h-48 border border-gray-200 p-2"
+                                        value={description}
+                                        placeholder="Tell us about yourself! Share your favorite genres, authors, or books. You can also mention what you're currently reading or what's on your wishlist. Feel free to add any other interests that might help others connect with you. Happy swapping!"
+                                        onChange={handleDescriptionChange}
+                                    />
+                                    <button className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow" onClick={saveProfile}>Save</button>
+                                </>
+                            ) : (
+                                <>
+                                    <p className="mb-4 text-lg leading-relaxed text-blueGray-700">
+                                        {description}
+                                    </p>
+                                    <button className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow" onClick={() => setEditMode(true)}>Edit</button>
+                                </>
+                            )}
+                            <br></br>
+                            <button 
+                                className="m-5 bg-red-200 hover:bg-red-300 text-gray-800 font-semibold py-2 px-4 border border-red-300 rounded shadow"
+                                onClick={() => {
+                                    if (window.confirm("Are you sure you want to delete your account? This action can't be undone.")) {
+                                        handleDeleteAccount()
+                                        console.log("Account deletion confirmed");
+                                    } else {
+                                        console.log("Account deletion canceled");
+                                    }
+                                }}
+                            >
+                                Delete Account
+                            </button>
                         </>
                     ) : (
-                        <>
-                            <p className="mb-4 text-lg leading-relaxed text-blueGray-700">
-                                {description}
-                            </p>
-                            {user.id == userId && (
-                                                    <button className="g-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow" onClick={() => setEditMode(true)}>Edit</button>
-                                                )}
-                        </>
-                    )}
-                    <br></br>
-                    <button 
-                        className="m-5 bg-red-200 hover:bg-red-300 text-gray-800 font-semibold py-2 px-4 border border-red-300 rounded shadow"
-                        onClick={() => {
-                            if (window.confirm("Are you sure you want to delete your account? This action can't be undone.")) {
-                                handleDeleteAccount()
-                                console.log("Account deletion confirmed");
-                            } else {
-                                console.log("Account deletion canceled");
-                            }
-                        }}
-                    >
-                        Delete Account
-                    </button>
+                        <div>
+                            <p className="mb-4 text-lg leading-relaxed text-blueGray-700">{profileUser.description}</p>
+                        </div>
+                    )
+                )}
+                
                 </div>
                 </div>
             </div>
