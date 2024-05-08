@@ -1,6 +1,7 @@
+// Search.js
 import React, { useState, useEffect } from "react";
 
-function Search({ events, setFilteredEvents }) {
+function Search({ events, setFilteredEvents, getStatus }) {
   const [sortBy, setSortBy] = useState("date");
   const [statusFilter, setStatusFilter] = useState("all");
 
@@ -15,12 +16,12 @@ function Search({ events, setFilteredEvents }) {
     if (statusFilter === "open") {
       sortedEvents = sortedEvents.filter(
         (event) =>
-          event.getStatus() === "Open" ||
-          event.getStatus() === "Needs Participants"
+          getStatus(event.attendees) === "Open" ||
+          getStatus(event.attendees) === "Needs Participants"
       );
     } else if (statusFilter === "filled") {
       sortedEvents = sortedEvents.filter(
-        (event) => event.getStatus() === "Filled"
+        (event) => getStatus(event.attendees) === "Filled"
       );
     }
 
