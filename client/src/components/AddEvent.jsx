@@ -3,8 +3,7 @@ import React, { useState } from "react";
 function AddEvent({ onAddEvent }) {
   const [formData, setFormData] = useState({
     name: "",
-    themed: false,
-    genre: "",
+    themed: "",
     date: "",
     time: "",
     address: "",
@@ -36,8 +35,7 @@ function AddEvent({ onAddEvent }) {
         // Reset the form
         setFormData({
           name: "",
-          themed: false,
-          genre: "",
+          themed: "",
           date: "",
           time: "",
           address: "",
@@ -53,8 +51,8 @@ function AddEvent({ onAddEvent }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="my-8">
-      <h2 className="text-2xl font-semibold mb-4">Create Event</h2>
+    <form onSubmit={handleSubmit} className="m-24">
+      <h2 className="text-2xl font-semibold mb-4">Add Event</h2>
       <div className="flex flex-col space-y-4">
         <input
           type="text"
@@ -66,7 +64,7 @@ function AddEvent({ onAddEvent }) {
           className="border border-gray-300 rounded-md p-2"
         />
         <label>
-          Themed Event:
+          Themed Event?
           <input
             type="checkbox"
             name="themed"
@@ -76,14 +74,7 @@ function AddEvent({ onAddEvent }) {
           />
         </label>
         {formData.themed && (
-          <input
-            type="text"
-            name="genre"
-            placeholder="Genre"
-            value={formData.genre}
-            onChange={handleChange}
-            className="border border-gray-300 rounded-md p-2"
-          />
+          <p className="text-xs">Include guidelines regarding theme in details section below</p>
         )}
         <input
           type="date"

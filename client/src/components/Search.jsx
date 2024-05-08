@@ -1,13 +1,13 @@
-// Search.js
 import React, { useState, useEffect } from "react";
 
 function Search({ events, setFilteredEvents, getStatus }) {
   const [sortBy, setSortBy] = useState("date");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [themedFilter, setThemedFilter] = useState("all");
 
   useEffect(() => {
     handleSearch();
-  }, [events, sortBy, statusFilter]);
+  }, [events, sortBy, statusFilter, themedFilter]);
 
   const handleSearch = () => {
     let sortedEvents = [...events];
@@ -16,14 +16,19 @@ function Search({ events, setFilteredEvents, getStatus }) {
     if (statusFilter === "open") {
       sortedEvents = sortedEvents.filter(
         (event) =>
-          getStatus(event.attendees) === "Open" ||
-          getStatus(event.attendees) === "Needs Participants"
+          getStatus(event.attendees) === "Open" 
       );
     } else if (statusFilter === "filled") {
       sortedEvents = sortedEvents.filter(
         (event) => getStatus(event.attendees) === "Filled"
       );
     }
+    
+     // Filter events based on theme
+    if (themedFilter === "themed") {
+      sortedEvents = sortedEvents.filter((event) => event.themed == 1 );
+    }
+
 
     // Sort events based on sortBy option
     if (sortBy === "date") {
@@ -32,16 +37,17 @@ function Search({ events, setFilteredEvents, getStatus }) {
       sortedEvents.sort((a, b) => a.name.localeCompare(b.name));
     }
 
-    setFilteredEvents(sortedEvents); // Update filteredEvents state
+    setFilteredEvents(sortedEvents); 
   };
 
   return (
-    <div>
+    <div className="text-center p-24 ">
       <label htmlFor="sortBy">Sort by:</label>
       <select
         id="sortBy"
         value={sortBy}
         onChange={(e) => setSortBy(e.target.value)}
+        className="mr-12"
       >
         <option value="date">Date</option>
         <option value="alphabetical">Name</option>
@@ -52,10 +58,21 @@ function Search({ events, setFilteredEvents, getStatus }) {
         id="statusFilter"
         value={statusFilter}
         onChange={(e) => setStatusFilter(e.target.value)}
+        className="mr-12"
       >
         <option value="all">All</option>
         <option value="open">Open</option>
         <option value="filled">Filled</option>
+      </select>
+      
+      <label htmlFor="themedFilter">Filter by themed:</label>
+      <select
+        id="themedFilter"
+        value={themedFilter}
+        onChange={(e) => setThemedFilter(e.target.value)}
+      >
+        <option value="all">All</option>
+        <option value="themed">Themed</option>
       </select>
     </div>
   );

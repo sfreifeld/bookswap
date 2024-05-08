@@ -73,8 +73,9 @@ def logout():
 @app.route('/events', methods=['GET'])
 def get_all_events():
     events = Event.query.all()
-    event_list = [{'id': event.id, 'name': event.name, 'date': event.date, 'time': event.time, 'address': event.address, 'attendees': event.attendees, 'details': event.details} for event in events]
+    event_list = [event.to_dict() for event in events]
     return jsonify(event_list), 200
+
 
 @app.route('/events', methods=["POST"])
 def add_event():
@@ -83,7 +84,6 @@ def add_event():
         new_event = Event(
             name=data['name'],
             themed=data['themed'],
-            genre=data.get('genre'), 
             date=data['date'],
             time=data['time'],
             address=data['address'],
@@ -122,8 +122,10 @@ def handle_rsvp(id):
         event.attendees += 1
     elif request.json.get('rsvp_status') == 'cancel':
         event.attendees -= 1
-
+       
+    db.session.add(event)
     db.session.commit()
+    print(event.attendees )
     return jsonify({"message": "RSVP updated successfully"}), 200
 
 

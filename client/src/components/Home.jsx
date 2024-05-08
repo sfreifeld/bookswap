@@ -23,7 +23,7 @@ function Home({ user, setUser }) {
   };
 
   useEffect(() => {
-    fetchEvents();
+      fetchEvents();
   }, []);
 
   const handleAddEvent = () => {
@@ -34,15 +34,15 @@ function Home({ user, setUser }) {
     setFilteredEvents(filteredEvents); // Update filteredEvents state
   };
 
+
 const getStatus = (attendees) => {
-    if (attendees >= 1 && attendees < 5) {
-      return "Needs Participants";
-    } else if (attendees >= 5 && attendees <= 9) {
-      return "Open";
-    } else {
-      return "Filled";
-    }
-  };
+        if (attendees >= 1 && attendees <= 10) {
+            return "Open";
+        } else {
+            return "Filled";
+        }
+};
+    
   return (
     <>
       <NavBar user={user} setUser={setUser} />
@@ -55,7 +55,7 @@ const getStatus = (attendees) => {
         </p>
       </section>
 
-      <section id="tutorial" className="h-screen mx-12">
+      <section id="tutorial">
         <h6 className="text-2xl font-semibold">Getting Started</h6>
         <div className="font-light space-y-8 my-8">
           <p>
@@ -74,7 +74,7 @@ const getStatus = (attendees) => {
         </div>
         <div className="flex flex-col p-2 sm:flex-row space-x-4">
           <a
-            href="#eventList"
+            href="#search"
             className="inline-flex items-center justify-center px-4 py-2.5 text-gray-600 text-center border border-gray-300 rounded-lg"
           >
             Browse Upcoming Events
@@ -124,8 +124,8 @@ const getStatus = (attendees) => {
         <Search events={events} setFilteredEvents={handleSearch} getStatus={getStatus} /> 
       </section>
 
-      <section id="eventList" className="container space-y-10 mx-10">
-        <h2 className="text-4xl text-center font-bold py-12">
+      <section id="eventList" className="container space-y-20">
+        <h2 className="text-4xl text-center font-bold ">
           Upcoming Book Swap Events
         </h2>
         {filteredEvents.map((event) => (

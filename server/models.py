@@ -65,9 +65,8 @@ class Event(db.Model, SerializerMixin):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
-    status = db.Column(db.String(20), default='Needs Participants')
-    themed = db.Column(db.Boolean, default=False)
-    genre = db.Column(db.String(50), nullable=True) 
+    status = db.Column(db.String(20))
+    themed = db.Column(db.Boolean)
     date = db.Column(db.String(10)) 
     time = db.Column(db.String(5)) 
     address = db.Column(db.String(100), nullable=False)

@@ -32,8 +32,9 @@ def add_fake_events(num_events=5):
         time = fake.time()
         address = fake.address()
         details = fake.text()
-        attendees = fake.random_int(min=1, max=10)
-        new_event = Event(name=name, date=date, time=time, address=address, details=details, attendees=attendees)
+        attendees = fake.random_int(min=1, max=15)
+        themed = fake.boolean()  
+        new_event = Event(name=name, date=date, time=time, address=address, details=details, attendees=attendees, themed=themed)
         db.session.add(new_event)
     db.session.commit()
 
