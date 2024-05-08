@@ -8,8 +8,9 @@ from flask_bcrypt import Bcrypt
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData
 
-
 app = Flask(__name__)
+
+load_dotenv()
 
 metadata = MetaData(naming_convention={
     "ix": "ix_%(column_0_label)s",
@@ -19,28 +20,21 @@ metadata = MetaData(naming_convention={
     "pk": "pk_%(table_name)s"
     })
 
-db = SQLAlchemy(metadata=metadata)
-
 fake = Faker()
-
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(metadata=metadata)
+
 app.json.compact = False
 
 migrate = Migrate(app, db)
 db.init_app(app)
 
-
 app.secret_key = os.getenv('secret_key')
 CORS(app)
 
-
-load_dotenv()
-
-
 bcrypt = Bcrypt(app)
-
 
 os.getenv('secret_key')
 

@@ -1,6 +1,5 @@
 
 from flask import Flask, request, jsonify, current_app, session, make_response, Response
-app = Flask(__name__)
 from flask_migrate import Migrate
 from models import db, User, Event, Moderator
 from faker import Faker
@@ -9,7 +8,7 @@ from services import *
 from random import randint
 
 
-
+app = Flask(__name__)
 
 
 @app.before_request
@@ -78,22 +77,55 @@ def get_all_events():
     event_list = [{'id': event.id, 'name': event.name, 'date': event.date, 'time': event.time, 'address': event.address, 'attendees': event.attendees, 'details': event.details} for event in events]
     return jsonify(event_list), 200
 
-@app.route('/api/create', methods=['POST'])
-def create_event():
+@app.route('/events', methods=["POST"])
+def add_event():
+    try:
+        data = request.json
+        new_event = Event(
+            name=data['name'],
+            themed=data['themed'],
+            genre=data.get('genre'), 
+            date=data['date'],
+            time=data['time'],
+            address=data['address'],
+            details=data['details'],
+            attendees=0 
+        )
+        db.session.add(new_event)
+        db.session.commit()
+        return jsonify({"message": "Event created successfully"}), 201
+    except Exception as e:
+        print(e)
+        return jsonify({"error": "Could not create event"}), 422
 
-    data = request.get_json()
-    # Extract event data from request
-    name = data.get('name')
-    date = data.get('date')
-    time = data.get('time')
-    address = data.get('address')
-    details = data.get('details')
-    # Create the event in the database
-    new_event = Event(name=name, date=date, time=time, address=address, details=details)
 
-    db.session.add(new_event)
+
+@app.route('/event/<int:id>', methods=['GET'])
+def one_event_route(id):
+    event = Event.query.filter(Event.id == id).first()
+    if not event:
+        return make_response({"error": "Event not found"}, 404)
+
+    if request.method == "GET":
+        return make_response(event.to_dict(), 200)
     db.session.commit()
-    return jsonify({"message": "Event created successfully"}), 201
+    return make_response(event.to_dict(), 200)
+
+
+
+@app.route('/event/<int:id>/rsvp', methods=['POST'])
+def handle_rsvp(id):
+    event = Event.query.get(id)
+    if not event:
+        return jsonify({"error": "Event not found"}), 404
+
+    if request.json.get('rsvp_status') == 'rsvp':
+        event.attendees += 1
+    elif request.json.get('rsvp_status') == 'cancel':
+        event.attendees -= 1
+
+    db.session.commit()
+    return jsonify({"message": "RSVP updated successfully"}), 200
 
 
 @app.route('/profile/<int:id>', methods=['GET', 'POST', 'DELETE'])
