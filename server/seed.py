@@ -1,6 +1,8 @@
 from faker import Faker
 from app import app
-from models import db, User, Event
+from models import *
+from services import *
+from random import randint
 
 fake = Faker()
 
@@ -14,8 +16,10 @@ def add_fake_users(num_users=10):
     for _ in range(num_users):
         email = fake.email()
         username = fake.user_name()
-        password = fake.password()
-        new_user = User(email=email, username=username, password=password)
+        password_hash = fake.password()
+        avatar_id = randint(1,10)
+        print(f"Generated avatar_id: {avatar_id}") 
+        new_user = User(email=email, username=username, password_hash=password_hash, avatar_id=avatar_id)
         db.session.add(new_user)
     db.session.commit()
 

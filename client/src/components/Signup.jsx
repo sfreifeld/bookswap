@@ -1,26 +1,134 @@
 import React from "react";
 import { useNavigate } from "react-router-dom"
+import { useState } from "react"
 
-function Signup() {
+function Signup( {setUser}) {
     const navigate = useNavigate()
 
     const handleSignInClick = () => {
-        navigate('/signin')
+        navigate('/')
     }
+
+
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [email, setEmail] = useState('');
+    const [emailError, setEmailError] = useState('');
+    const [usernameError, setUsernameError] = useState('');
+    const [confirmPasswordError, setConfirmPasswordError] = useState('');
+
+    const handleEmailError = () => {
+        if (!email.includes('@')) {
+            setEmailError("Email must include '@'");
+        } else {
+            setEmailError('');
+        }
+    }
+
+    const handleUsernameError = () => {
+        if (username.length < 6 || username.length > 20) {
+            setUsernameError("Username must be between 6 and 20 characters");
+        } else {
+            setUsernameError('');
+        }
+    }
+
+    const handleConfirmPasswordErrror = () => {
+        if (password != confirmPassword) {
+            setConfirmPasswordError("Passwords do not match");
+        } else {
+            setConfirmPasswordError('');
+        }
+    }
+
+    function validateInputs() {
+        const emailValid = email.includes('@') && email !== '' ;
+        const usernameValid = username.length >= 6 && username.length <= 20 && username !== '';
+        const passwordsMatch = password === confirmPassword && confirmPassword !== '';
+
+        return emailValid && usernameValid && passwordsMatch;
+    }
+
+    function handleSignUp(e) {
+        e.preventDefault()
+        if (!validateInputs()) {
+            alert('Validation failed');
+            return;
+        }
+        fetch('/api/signup', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email,
+                username,
+                password
+            })
+        })
+        .then(r => {
+            if (!r.ok) {
+                alert('User could not be created')
+            }
+            return r.json()
+        })
+        .then(data => {
+            alert(data.message)
+            setUser(data.user)
+            navigate('/home')
+        })
+        .catch(error => {
+            console.error('Signup error:', error)
+            alert('User could not be created')
+        })
+    }
+
     
     
     return (
         <>
-            <p> Welcome to BookSwap!</p>
-            <form>
-                <input placeholder="Email Address"></input>
-                <input placeholder="Username"></input>
-                <input type="password" placeholder="Password"></input>
-                <input type="password" placeholder="Confirm password"></input>
-                <button type="submit">Create Account</button>
-            </form>
-            <p>Already have an account? Click here to sign in</p>
-            <button onClick={handleSignInClick}>Sign In</button>
+    
+                <div className="w-full max-w-xs translate-x-2/3 flex flex-col">
+                <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" onSubmit={(e)=>handleSignUp(e)}>
+                  <div className="mb-4">
+                    <label className="block text-gray-700 text-sm font-bold mb-2">
+                      Email
+                    </label>
+                    <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="email" type="text" placeholder="Email Address" value={email} onChange={e => setEmail(e.target.value)} onBlur={handleEmailError}/>
+                    {emailError && <div className ='text-red-600 text-sm italic m-1'>{emailError}</div>}
+                  </div>
+                  <div className="mb-4">
+                    <label className="block text-gray-700 text-sm font-bold mb-2">
+                      Username
+                    </label>
+                    <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="text" placeholder="Username" value={username} onChange={e => setUsername(e.target.value)} onBlur={handleUsernameError}/>
+                    {usernameError && <div className ='text-red-600 text-sm italic m-1'>{usernameError}</div>} 
+                  </div>
+                  <div className="mb-4">
+                    <label className="block text-gray-700 text-sm font-bold mb-2">
+                      Password
+                    </label>
+                    <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="password" type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)}/>
+                  </div>
+                  <div className="mb-6">
+                    <label className="block text-gray-700 text-sm font-bold mb-2">
+                      Confirm Password
+                    </label>
+                    <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="password-confirmation" type="password" placeholder="Confirm Password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} onBlur={handleConfirmPasswordErrror}/>
+                    {confirmPasswordError && <div className ='text-red-600 text-sm italic m-1'>{confirmPasswordError}</div>}
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                      Create Account
+                    </button>
+                  </div>
+                </form>
+                <p className = "text-sm italic"> Already have an account?  Click here to sign in!</p>
+              <button onClick={handleSignInClick} className="w-24 m-3 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                      Sign In
+              </button>
+              </div>
         </>
     )
 }
