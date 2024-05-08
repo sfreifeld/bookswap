@@ -1,13 +1,10 @@
 from sqlalchemy_serializer import SerializerMixin
-<<<<<<< HEAD
-=======
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.ext.hybrid import hybrid_property
 from services import *
 
 
->>>>>>> origin/sab
 
 
 
@@ -37,8 +34,6 @@ class Event(db.Model, SerializerMixin):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id')) 
     user = db.relationship('User', backref=db.backref('events', lazy=True))
 
-<<<<<<< HEAD
-=======
     
 class User(db.Model, SerializerMixin):
     __tablename__ = 'users'
@@ -95,4 +90,3 @@ class User(db.Model, SerializerMixin):
         return bcrypt.check_password_hash(self._password_hash, password.encode('utf-8'))
     '''
 
->>>>>>> origin/sab
