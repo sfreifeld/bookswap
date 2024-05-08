@@ -28,6 +28,7 @@ function Profile( { user, setUser }) {
     const [selectedAvatarId, setSelectedAvatarId] = useState(user ? user.avatar_id : 5);
     const [eventsAttended, setEventsAttended] = useState(0)
     const [eventsCreated, setEventsCreated] = useState(0)
+    const [filteredEvents, setFilteredEvents] = useState([]);
 
     const navigate = useNavigate();
 
@@ -53,9 +54,19 @@ function Profile( { user, setUser }) {
         fetch(`/api/attendees/${userId}`)
             .then((r) => r.json())
             .then((userData) => {
+                console.log((userData))
                 setEventsAttended((userData.length));
+                const eventIds = userData.map(attendee => attendee["event_id"]);
 
-            })
+            // Fetch all events then filter them
+            fetch(`/api/events`)
+                .then(res => res.json())
+                .then(allEvents => {
+                    const userEvents = allEvents.filter(event => eventIds.includes(event.id));
+                    setFilteredEvents(userEvents)
+                    // Process filtered events here
+                });
+        })
             .catch((error) => {
                 console.error('Error fetching user metrics:', error);
             });
@@ -148,6 +159,9 @@ function Profile( { user, setUser }) {
                                         ))}
                                     </div>
                                 )}
+                 <h3 className="text-3xl font-semibold leading-normal mb-2 text-blueGray-700 mb-2 pt-5">
+                { profileUser ? profileUser.username : "" }
+                </h3>
                 <div className="w-full px-4 text-center mt-10">
                 <div className="flex justify-center py-4 lg:pt-4 pt-8">
                     <div className="mr-4 p-3 text-center">
@@ -166,9 +180,12 @@ function Profile( { user, setUser }) {
                 </div>
             </div>
             <div className="text-center mt-12">
-                <h3 className="text-xl font-semibold leading-normal mb-2 text-blueGray-700 mb-2">
-                { profileUser ? profileUser.username : "" }
-                </h3>
+            <p className="text-xl font-semibold leading-normal mb-2 text-blueGray-700 mb-2 underline">User  Events</p>
+            <ul>
+                {filteredEvents.map((event, index) => (
+                    <li key={index}>{event.name} - {event.date}</li> // Adjust according to your event object properties
+                ))}
+            </ul>
             </div>
             <div className="mt-10 py-10 border-t border-blueGray-200 text-center">
                 <div className="flex flex-wrap justify-center ">
