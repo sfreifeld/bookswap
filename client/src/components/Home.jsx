@@ -5,8 +5,9 @@ import NavBar from "./NavBar";
 import AddEvent from "./AddEvent";
 
 function Home({ user, setUser }) {
-  const [events, setEvents] = useState([]);
-  const [filteredEvents, setFilteredEvents] = useState([]);
+    const [events, setEvents] = useState([]);
+    const [filteredEvents, setFilteredEvents] = useState([]); 
+  
 
   const fetchEvents = async () => {
     try {
@@ -16,7 +17,6 @@ function Home({ user, setUser }) {
       }
       const data = await response.json();
       setEvents(data);
-      setFilteredEvents(data);
     } catch (error) {
       console.error("Error fetching events:", error);
     }
@@ -30,13 +30,19 @@ function Home({ user, setUser }) {
     fetchEvents();
   };
 
-  const handleSearch = (searchTerm) => {
-    const filtered = events.filter((event) =>
-      event.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    setFilteredEvents(filtered);
+ const handleSearch = (filteredEvents) => {
+    setFilteredEvents(filteredEvents); // Update filteredEvents state
   };
 
+const getStatus = (attendees) => {
+    if (attendees >= 1 && attendees < 5) {
+      return "Needs Participants";
+    } else if (attendees >= 5 && attendees <= 9) {
+      return "Open";
+    } else {
+      return "Filled";
+    }
+  };
   return (
     <>
       <NavBar user={user} setUser={setUser} />
@@ -114,10 +120,8 @@ function Home({ user, setUser }) {
         </div>
       </section>
 
-      <AddEvent onAddEvent={handleAddEvent} />
-
       <section id="search">
-        <Search events={events} setFilteredEvents={handleSearch} />
+        <Search events={events} setFilteredEvents={handleSearch} getStatus={getStatus} /> 
       </section>
 
       <section id="eventList" className="container space-y-10 mx-10">
@@ -128,6 +132,11 @@ function Home({ user, setUser }) {
           <Event key={event.id} event={event} />
         ))}
       </section>
+      
+        <section id="addEvent">
+               <AddEvent onAddEvent={handleAddEvent} />
+        </section>    
+          
     </>
   );
 }

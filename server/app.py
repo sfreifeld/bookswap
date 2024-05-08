@@ -88,7 +88,7 @@ def add_event():
             time=data['time'],
             address=data['address'],
             details=data['details'],
-            attendees=0 
+            attendees=1 
         )
         db.session.add(new_event)
         db.session.commit()

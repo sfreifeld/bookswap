@@ -1,49 +1,64 @@
+// Search.js
 import React, { useState, useEffect } from "react";
 
-function Search({ events, setFilteredEvents }) {
-    const [sortBy, setSortBy] = useState("date");
-    const [statusFilter, setStatusFilter] = useState("all");
+function Search({ events, setFilteredEvents, getStatus }) {
+  const [sortBy, setSortBy] = useState("date");
+  const [statusFilter, setStatusFilter] = useState("all");
 
-    useEffect(() => {
-        handleSearch();
-    }, [sortBy, statusFilter]);
+  useEffect(() => {
+    handleSearch();
+  }, [events, sortBy, statusFilter]);
 
-    const handleSearch = () => {
-        let sortedEvents = [...events];
+  const handleSearch = () => {
+    let sortedEvents = [...events];
 
     // Filter events based on status
     if (statusFilter === "open") {
-        // Include events with "open" status and "needs participants" status
-        sortedEvents = sortedEvents.filter(event => event.getStatus() === "Open" ||event.getStatus() === "Needs Participants" );
+      sortedEvents = sortedEvents.filter(
+        (event) =>
+          getStatus(event.attendees) === "Open" ||
+          getStatus(event.attendees) === "Needs Participants"
+      );
     } else if (statusFilter === "filled") {
-        sortedEvents = sortedEvents.filter(event => event.getStatus() === "Filled");
+      sortedEvents = sortedEvents.filter(
+        (event) => getStatus(event.attendees) === "Filled"
+      );
     }
-        // Sort events based on sortBy option
-        if (sortBy === "date") {
-            sortedEvents.sort((a, b) => new Date(b.date) - new Date(a.date));
-        } else if (sortBy === "alphabetical") {
-            sortedEvents.sort((a, b) => a.name.localeCompare(b.name));
-        }
 
-        setFilteredEvents(sortedEvents);
-    };
+    // Sort events based on sortBy option
+    if (sortBy === "date") {
+      sortedEvents.sort((a, b) => new Date(b.date) - new Date(a.date));
+    } else if (sortBy === "alphabetical") {
+      sortedEvents.sort((a, b) => a.name.localeCompare(b.name));
+    }
 
-    return (
-        <div>
-            <label htmlFor="sortBy">Sort by:</label>
-            <select id="sortBy" value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
-                <option value="date">Date</option>
-                <option value="alphabetical">Name</option>
-            </select>
+    setFilteredEvents(sortedEvents); // Update filteredEvents state
+  };
 
-            <label htmlFor="statusFilter">Filter by status:</label>
-            <select id="statusFilter" value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
-                <option value="all">All</option>
-                <option value="open">Open</option>
-                <option value="filled">Filled</option>
-            </select>
-        </div>
-    );
+  return (
+    <div>
+      <label htmlFor="sortBy">Sort by:</label>
+      <select
+        id="sortBy"
+        value={sortBy}
+        onChange={(e) => setSortBy(e.target.value)}
+      >
+        <option value="date">Date</option>
+        <option value="alphabetical">Name</option>
+      </select>
+
+      <label htmlFor="statusFilter">Filter by status:</label>
+      <select
+        id="statusFilter"
+        value={statusFilter}
+        onChange={(e) => setStatusFilter(e.target.value)}
+      >
+        <option value="all">All</option>
+        <option value="open">Open</option>
+        <option value="filled">Filled</option>
+      </select>
+    </div>
+  );
 }
 
 export default Search;
