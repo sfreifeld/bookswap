@@ -1,4 +1,3 @@
-// AddEvent.js
 import React, { useState } from "react";
 
 function AddEvent({ onAddEvent }) {
@@ -44,8 +43,8 @@ function AddEvent({ onAddEvent }) {
           address: "",
           details: ""
         });
+        alert("Event successfully added!!")
       } else {
-        // Handle error
         console.error("Failed to add event:", response.statusText);
       }
     } catch (error) {
