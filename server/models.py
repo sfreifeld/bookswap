@@ -6,6 +6,7 @@ from services import *
 from flask import jsonify
 
 
+
 class User(db.Model, SerializerMixin):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
@@ -14,6 +15,8 @@ class User(db.Model, SerializerMixin):
     description = db.Column(db.String, default="")
     _password_hash = db.Column(db.String)
     avatar_id = db.Column(db.Integer)
+
+    serialize_rules = ('-attendee', '-attendee.event', '-attendee.user')
 
 
 
@@ -37,11 +40,15 @@ class Attendee(db.Model, SerializerMixin):
 
     __tablename__ = "attendees"
 
+    serialize_rules = ('-user', '-event')
+
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     event_id = db.Column(db.Integer, db.ForeignKey('events.id'))
     user = db.relationship('User', backref=db.backref('attendee', lazy=True))
     event = db.relationship('Event', backref=db.backref('attendee', lazy=True))
+
+    
 
     @classmethod
     def find_by_user_id(cls, user_id):
@@ -54,6 +61,8 @@ class Event(db.Model, SerializerMixin):
 
     __tablename__ = 'events'
 
+    serialize_rules = ('-attendee', '-attendee.user')
+
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     status = db.Column(db.String(20), default='Needs Participants')
@@ -64,7 +73,9 @@ class Event(db.Model, SerializerMixin):
     address = db.Column(db.String(100), nullable=False)
     details = db.Column(db.Text)
     attendees = db.Column(db.Integer, nullable=False)
-    moderator_id = db.Column(db.Integer, db.ForeignKey('users.id')) 
+    moderator_id = db.Column(db.Integer) 
+
+    
 
 
     @classmethod

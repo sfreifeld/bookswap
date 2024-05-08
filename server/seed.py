@@ -37,12 +37,24 @@ def add_fake_events(num_events=5):
         db.session.add(new_event)
     db.session.commit()
 
+
+def add_fake_attendees(num_events=10):
+
+    for _ in range(num_events):
+
+        user_id = fake.random_int(min=1, max=10)
+        event_id = fake.random_int(min=1, max=5)
+        new_attendees = Attendee(user_id = user_id, event_id = event_id)
+        db.session.add(new_attendees)
+    db.session.commit()
+
 if __name__ == '__main__':
     with app.app_context():
         drop_tables()
         create_tables()
         add_fake_users()
         add_fake_events()
+        add_fake_attendees()
 
 
 
