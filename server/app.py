@@ -1,4 +1,3 @@
-
 from flask import Flask, request, jsonify, current_app, session, make_response, Response
 from flask_migrate import Migrate
 from models import db, User, Event, Attendee
@@ -167,11 +166,49 @@ def one_profile_route(id):
         return response
 
 
-@app.route('/attendees/<int:user_id>', methods=['GET'])
+@app.route('/attendees/<int:user_id>', methods=['GET', 'POST','DELETE'])
 def get_attendees_by_user(user_id):
     attendees = Attendee.find_by_user_id(user_id)
     attendee_list = [attendee.to_dict() for attendee in attendees]
     return jsonify(attendee_list), 200
+
+
+
+
+@app.route('/attendees/<int:event_id>/rsvp', methods=['POST', 'DELETE'])
+def handle_rsvp_user(event_id):
+    user_id = session["user_id"]
+    print(user_id)
+    if not user_id:
+        return jsonify({"error": "User not authenticated"}), 401
+
+    if request.method == 'POST':
+        # Assuming the front end sends whether it's an RSVP or a cancellation
+        new_attendee = Attendee(user_id=user_id, event_id=event_id)
+        print(new_attendee)
+        db.session.add(new_attendee)
+        db.session.commit()
+        return jsonify({"message": "RSVP successful"}), 201
+
+    elif request.method == 'DELETE':
+        attendee = Attendee.query.filter_by(user_id=user_id, event_id=event_id).first()
+        if attendee:
+            db.session.delete(attendee)
+            db.session.commit()
+            return jsonify({"message": "RSVP cancellation successful"}), 200
+        else:
+            return jsonify({"error": "No RSVP found to cancel"}), 404
+    
+
+
+
+
+
+
+
+
+
+
 
 
 @app.route('/events/<int:user_id>', methods=['GET'])
@@ -182,4 +219,5 @@ def get_events_by_user(user_id):
 
 
 if __name__ == '__main__':
+    app.run(port=5555, debug=True)
     app.run(port=5555, debug=True)
