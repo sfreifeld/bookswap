@@ -51,8 +51,8 @@ function AddEvent({ onAddEvent }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="m-24">
-      <h2 className="text-2xl font-semibold mb-4">Add Event</h2>
+    <form onSubmit={handleSubmit} className="w-1/2">
+      <h2 className="text-center text-4xl font-semibold py-12">Add An Event</h2>
       <div className="flex flex-col space-y-4">
         <input
           type="text"
@@ -63,19 +63,6 @@ function AddEvent({ onAddEvent }) {
           required
           className="border border-gray-300 rounded-md p-2"
         />
-        <label>
-          Themed Event?
-          <input
-            type="checkbox"
-            name="themed"
-            checked={formData.themed}
-            onChange={handleChange}
-            className="ml-2"
-          />
-        </label>
-        {formData.themed && (
-          <p className="text-xs">Include guidelines regarding theme in details section below</p>
-        )}
         <input
           type="date"
           name="date"
@@ -100,17 +87,29 @@ function AddEvent({ onAddEvent }) {
           required
           className="border border-gray-300 rounded-md p-2"
         />
-        <textarea
+        <label>
+          Themed Event?
+          <input
+            type="checkbox"
+            name="themed"
+            checked={formData.themed}
+            onChange={handleChange}
+            className="ml-2"
+          />
+        </label>
+        {formData.themed && (
+           <textarea
           name="details"
-          placeholder="Event Details"
+          placeholder="Event Details (i.e. guidelines regarding theme)"
           value={formData.details}
           onChange={handleChange}
           required
           className="border border-gray-300 rounded-md p-2"
         />
+          )}
         <button
           type="submit"
-          className="bg-blue-500 text-white font-semibold py-2 rounded-md hover:bg-blue-600 transition duration-300"
+          className="px-5 py-2.5 font-medium bg-purple-50 hover:bg-purple-100 hover:text-purple-600 text-purple-500 rounded-lg self-center w-fit"
         >
           Add Event
         </button>

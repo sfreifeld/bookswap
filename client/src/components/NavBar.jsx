@@ -55,13 +55,13 @@ function NavBar( {user, setUser}) {
                   {/* Current: "border-indigo-500 text-gray-900", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700" */}
                   <Link
                     to="/home"
-                    className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                    className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-purple-300 hover:text-gray-700"
                   >
                     Dashboard
                   </Link>
                   <Link
                     to={user ? `/profile/${user.id}` : '#'}
-                    className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                    className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-purple-300 hover:text-gray-700"
                     > Profile
                 </Link>
                 </div>
@@ -70,7 +70,7 @@ function NavBar( {user, setUser}) {
                 <button
                   type="button"
                   onClick = {logout}
-                  className="font-bold p-2 relative rounded-full bg-indigo-500 p-1 text-white text-xs hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                  className="px-5 py-2.5 font-medium bg-purple-50 hover:bg-purple-100 hover:text-purple-600 text-purple-500 rounded-lg"
                 > Logout
                 </button>
 

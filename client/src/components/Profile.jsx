@@ -2,6 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from 'react-router-dom';
 import NavBar from "./NavBar";
+import Footer from "./Footer";
 import avatar1 from "../assets/1.png"
 import avatar2 from "../assets/2.png"
 import avatar3 from "../assets/3.png"
@@ -141,9 +142,8 @@ function Profile( { user, setUser }) {
 
         <>
         <NavBar user={user} setUser={setUser} />
-        <section className="w-full  bg-blueGray-50">
-        <div className="w-full px-4 mx-auto">
-        <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-xl rounded-lg mt-16">
+        <section className="w-screen">
+        <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 mt-16">
             <div className="px-6">
             <div className="flex flex-wrap justify-center">
                 <div className="w-full px-4 flex justify-center">
@@ -187,10 +187,10 @@ function Profile( { user, setUser }) {
                 ))}
             </ul>
             </div>
-            <div className="mt-10 py-10 border-t border-blueGray-200 text-center">
+            <div className="border-t border-blueGray-200 text-center ">
                 <div className="flex flex-wrap justify-center ">
             
-               <div className="w-full lg:w-9/12 px-4 ">
+               <div className="w-full lg:w-9/12 space-y-4 p-24">
                 
                 {profileUser && (
                     profileUser.id === user.id ? (
@@ -203,19 +203,19 @@ function Profile( { user, setUser }) {
                                         placeholder="Tell us about yourself! Share your favorite genres, authors, or books. You can also mention what you're currently reading or what's on your wishlist. Feel free to add any other interests that might help others connect with you. Happy swapping!"
                                         onChange={handleDescriptionChange}
                                     />
-                                    <button className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow" onClick={saveProfile}>Save</button>
+                                    <button className="px-5 py-2.5 font-medium bg-purple-50 hover:bg-purple-100 hover:text-purple-600 text-purple-500 rounded-lg" onClick={saveProfile}>Save</button>
                                 </>
                             ) : (
                                 <>
-                                    <p className="mb-4 text-lg leading-relaxed text-blueGray-700">
+                                    <p className="mb-4 text-lg leading-relaxed text-blueGray-700 w-full h-48 border border-gray-200 p-2">
                                         {description}
                                     </p>
-                                    <button className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow" onClick={() => setEditMode(true)}>Edit</button>
+                                    <button className="px-5 py-2.5 font-medium bg-purple-50 hover:bg-purple-100 hover:text-purple-600 text-purple-500 rounded-lg" onClick={() => setEditMode(true)}>Edit</button>
                                 </>
                             )}
                             <br></br>
                             <button 
-                                className="m-5 bg-red-200 hover:bg-red-300 text-gray-800 font-semibold py-2 px-4 border border-red-300 rounded shadow"
+                                className="px-5 py-2.5 font-medium bg-red-50 hover:bg-red-100 hover:text-red-600 text-red-500 rounded-lg"
                                 onClick={() => {
                                     if (window.confirm("Are you sure you want to delete your account? This action can't be undone.")) {
                                         handleDeleteAccount()
@@ -240,10 +240,8 @@ function Profile( { user, setUser }) {
             </div>
             </div>
         </div>
-        </div>
-        <footer className="relative  pt-8 pb-6 mt-8">
-        </footer>
         </section>
+        <Footer/>
         </>
     )
     }

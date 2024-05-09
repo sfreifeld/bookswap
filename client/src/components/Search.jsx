@@ -41,7 +41,7 @@ function Search({ events, setFilteredEvents, getStatus }) {
   };
 
   return (
-    <div className="text-center p-24 ">
+    <div className="text-center pb-12">
       <label htmlFor="sortBy">Sort by:</label>
       <select
         id="sortBy"

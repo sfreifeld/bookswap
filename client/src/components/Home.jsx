@@ -3,11 +3,15 @@ import Event from "./Event";
 import Search from "./Search";
 import NavBar from "./NavBar";
 import AddEvent from "./AddEvent";
+import Footer from "./Footer";
 
 function Home({ user, setUser }) {
-    const [events, setEvents] = useState([]);
-    const [filteredEvents, setFilteredEvents] = useState([]); 
-  
+  const [events, setEvents] = useState([]);
+  const [filteredEvents, setFilteredEvents] = useState([]);
+
+  useEffect(() => {
+    fetchEvents();
+  }, []);
 
   const fetchEvents = async () => {
     try {
@@ -22,42 +26,35 @@ function Home({ user, setUser }) {
     }
   };
 
-  useEffect(() => {
-      fetchEvents();
-  }, []);
-
   const handleAddEvent = () => {
     fetchEvents();
   };
 
- const handleSearch = (filteredEvents) => {
-    setFilteredEvents(filteredEvents); // Update filteredEvents state
+  const handleSearch = (filteredEvents) => {
+    setFilteredEvents(filteredEvents);
   };
 
+  const getStatus = (attendees) => {
+    return attendees >= 1 && attendees <= 10 ? "Open" : "Filled";
+  };
 
-const getStatus = (attendees) => {
-        if (attendees >= 1 && attendees <= 10) {
-            return "Open";
-        } else {
-            return "Filled";
-        }
-};
-    
   return (
     <>
       <NavBar user={user} setUser={setUser} />
-      <section id="hero" className="h-screen mx-10">
-        <h1 className="text-8xl font-bold pt-60">
-          Welcome to Book Swap, {user.username}!
-        </h1>
-        <p className="text-2xl mt-8">
-          Discover your new favorite read & connect with fellow book worms!
-        </p>
+
+      <section id="hero" className="flex items-center justify-center h-screen w-screen">
+        <div className="flex-1 mx-20">
+          <h1 className="text-8xl font-bold">Welcome to Book Swap, <span className="text-purple-200 hover:text-purple-300 transition ease-in-out duration-300">{user.username}</span></h1>
+          <p className="text-xl pt-4">Discover your new favorite read & connect with fellow bookworms!</p>
+        </div>
+        <div className="flex-1 mx-24">
+          <img src="https://t3.ftcdn.net/jpg/01/97/02/40/360_F_197024073_Kc1nAJ6T7hgFN808TgPi5LXFUSjxfIup.jpg" alt="Pixelized Books" className="w-full h-auto" />
+        </div>
       </section>
 
-      <section id="tutorial">
-        <h6 className="text-2xl font-semibold">Getting Started</h6>
-        <div className="font-light space-y-8 my-8">
+      <section id="tutorial" className="flex flex-col items-center justify-center space-y-12 h-screen">
+        <h2 className="text-4xl font-semibold">Getting Started</h2>
+        <div className="space-y-4 w-3/4 text-center">
           <p>
             Browse local book swap events based on location, date, and themes.
             Once you have found an event that interests you, you can RSVP for
@@ -72,75 +69,42 @@ const getStatus = (attendees) => {
             event details and guidelines with ease.
           </p>
         </div>
-        <div className="flex flex-col p-2 sm:flex-row space-x-4">
-          <a
-            href="#search"
-            className="inline-flex items-center justify-center px-4 py-2.5 text-gray-600 text-center border border-gray-300 rounded-lg"
+        
+        <div className="flex space-x-12">
+          <button onClick={() => window.location.href = "#search"}
+          className="px-5 py-2.5 font-medium bg-purple-50 hover:bg-purple-100 hover:text-purple-600 text-purple-500 rounded-lg"
           >
-            Browse Upcoming Events
-            <svg
-              className="ml-2 -mr-1 w-5 h-5"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="m8 7 4 4 4-4m-8 6 4 4 4-4"
-              />
-            </svg>
-          </a>
-          <a
-            href="#addEvent"
-            className="inline-flex items-center justify-center px-4 py-2.5 text-gray-600 text-center border border-gray-300 rounded-lg"
+            Browse Events
+          </button>
+          <button onClick={() => window.location.href = "#addEvent"}
+            className="px-5 py-2.5 font-medium bg-purple-50 hover:bg-purple-100 hover:text-purple-600 text-purple-500 rounded-lg"
           >
             Create Event
-            <svg
-              className="ml-2 -mr-1 w-5 h-5"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              fill="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                fillRule="evenodd"
-                d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm11-4.243a1 1 0 1 0-2 0V11H7.757a1 1 0 1 0 0 2H11v3.243a1 1 0 1 0 2 0V13h3.243a1 1 0 1 0 0-2H13V7.757Z"
-                clipRule="evenodd"
-              />
-            </svg>
-          </a>
+          </button>
+        </div>
+
+      </section>
+
+      <section id="search" className="flex flex-col items-center justify-center">
+         <h2 className="text-4xl font-semibold py-12">Book Swap Events</h2>
+        <Search events={events} setFilteredEvents={handleSearch} getStatus={getStatus} />
+      </section>
+
+      <section id="eventList" className="flex flex-col items-center justify-center">
+        <div className="w-1/2 space-y-12">
+          {filteredEvents.map((event) => (
+            <Event key={event.id} event={event} />
+          ))}
         </div>
       </section>
 
-      <section id="search">
-        <Search events={events} setFilteredEvents={handleSearch} getStatus={getStatus} /> 
+      <section id="addEvent" className="flex flex-col items-center justify-center h-screen">
+          <AddEvent onAddEvent={handleAddEvent} />
       </section>
 
-      <section id="eventList" className="container space-y-20">
-        <h2 className="text-4xl text-center font-bold ">
-          Upcoming Book Swap Events
-        </h2>
-        {filteredEvents.map((event) => (
-          <Event key={event.id} event={event} />
-        ))}
-      </section>
-      
-        <section id="addEvent">
-               <AddEvent onAddEvent={handleAddEvent} />
-        </section>    
-          
+      <Footer/>
     </>
   );
 }
 
 export default Home;
-
-
