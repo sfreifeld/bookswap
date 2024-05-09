@@ -56,17 +56,10 @@ function Home({ user, setUser }) {
         <h2 className="text-4xl font-semibold">Getting Started</h2>
         <div className="space-y-4 w-3/4 text-center">
           <p>
-            Browse local book swap events based on location, date, and themes.
-            Once you have found an event that interests you, you can RSVP for
-            the event with a simple click. At the event, you can expect to
-            connect with fellow book enthusiasts, exchange recommendations, and
-            possibly stumble upon a new favorite read that you wouldn't have
-            considered otherwise. After attending a book swap event, take a
-            moment to rate and review the books you've received.
+            Browse local book swap gatherings tailored to your preferences—whether it's by location, date, or theme. Simply click to RSVP for the events that catch your eye. Immerse yourself in an intimate community of book lovers, where you can share recommendations, forge connections, and uncover literary gems you might never have encountered otherwise. 
           </p>
           <p>
-            Feeling inspired? Host your own book swap in minutes-- setting up
-            event details and guidelines with ease.
+            Feeling inspired? Create your own book swap in just minutes. Customize event details and guidelines to suit your vision with ease. 
           </p>
         </div>
         
