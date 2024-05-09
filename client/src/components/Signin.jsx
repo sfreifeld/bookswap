@@ -72,7 +72,7 @@ function Signin( { setUser } ) {
                     <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="password" type="password" placeholder="Password" value={loginPassword} onChange={(e) => setLoginPassword(e.target.value)}/>
                   </div>
                   <div className="flex items-center justify-center">
-                    <button className=" px-5 py-2.5 font-medium bg-purple-50 hover:bg-purple-100 hover:text-purple-600 text-purple-500 rounded-lg" type="submit">
+                    <button className="px-5 py-2.5 font-medium bg-purple-50 hover:bg-purple-100 hover:text-purple-600 text-purple-500 rounded-lg" type="submit">
                       Sign In
                     </button>
                   </div>

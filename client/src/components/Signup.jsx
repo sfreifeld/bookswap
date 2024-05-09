@@ -89,8 +89,9 @@ function Signup( {setUser}) {
     return (
         <>
     
-                <div className="w-full max-w-xs translate-x-2/3 flex flex-col">
-                <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" onSubmit={(e)=>handleSignUp(e)}>
+        <div className="h-screen w-screen flex items-center justify-center flex-col space-y-4">
+          <h2 className="text-4xl font-semibold py-12">Welcome to Book Swap!</h2>
+                <form className="bg-white w-1/4 shadow-md rounded px-8 pt-6 pb-8 mb-4" onSubmit={(e)=>handleSignUp(e)}>
                   <div className="mb-4">
                     <label className="block text-gray-700 text-sm font-bold mb-2">
                       Email
@@ -118,14 +119,14 @@ function Signup( {setUser}) {
                     <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="password-confirmation" type="password" placeholder="Confirm Password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} onBlur={handleConfirmPasswordErrror}/>
                     {confirmPasswordError && <div className ='text-red-600 text-sm italic m-1'>{confirmPasswordError}</div>}
                   </div>
-                  <div className="flex items-center justify-between">
-                    <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                  <div className="flex items-center justify-center">
+                    <button className="px-5 py-2.5 font-medium bg-purple-50 hover:bg-purple-100 hover:text-purple-600 text-purple-500 rounded-lg" type="submit">
                       Create Account
                     </button>
                   </div>
                 </form>
                 <p className = "text-sm italic"> Already have an account?  Click here to sign in!</p>
-              <button onClick={handleSignInClick} className="w-24 m-3 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+              <button onClick={handleSignInClick} className="px-5 py-2.5 font-medium bg-purple-50 hover:bg-purple-100 hover:text-purple-600 text-purple-500 rounded-lg">
                       Sign In
               </button>
               </div>
