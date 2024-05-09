@@ -57,10 +57,17 @@ To run the website locally, follow these steps:
 
 ## Usage
 
+### Sign up / Sign in
+![Sign up](./sign_up.png)
+![Sign in](./sign_in.png)
+
+
 ### Browse Events
 - On the homepage, you'll see a list of upcoming book swap events.
 - Use the filters to browse events based on location, date, or theme.
 - Click on an event to view more details and RSVP.
+
+![Event List](./event_list.png)
 
 ### RSVP for Events
 - To RSVP for an event, simply click the "RSVP" button on the event's page.
@@ -71,6 +78,16 @@ To run the website locally, follow these steps:
 - Fill out the event details, including location, date, and theme.
 - Customize event guidelines according to your preferences.
 - Click "Create" to publish your event and share it with the community.
+
+![Add An Event](./add_event.png)
+
+### Edit Profile
+- View detailed statistics about your activity and contributions.
+- Click "Edit" to select your avatar.
+- Click "Edit" to update your bio to share more about yourself with the community.
+- Click "Delete" to delete user's account. 
+
+![Profile](./profile.png)
 
 ## Version History
 v1.0.0 (05-09-2024): Initial release with basic functionality for browsing and RSVPing to events.
